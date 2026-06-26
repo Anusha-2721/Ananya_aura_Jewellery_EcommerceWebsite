@@ -167,28 +167,37 @@ Stores order information:
 
 ---
 
-# 📂 Project Structure
-Ananya-Aura-Jewellery
+## 📂 Project Structure
 
+```text
+Ananya-Aura-Jewellery
 │
 ├── frontend
-│   │
-│   ├── HTML Pages
+│   ├── Login.html
+│   ├── Register.html
+│   ├── main.html
+│   ├── cart.html
+│   ├── checkoutPage.html
+│   ├── orders.html
+│   ├── profile.html
 │   ├── CSS Files
 │   └── JavaScript Files
 │
 ├── backend
-│   │
 │   ├── server.js
-│   ├── Database Connection
-│   ├── Routes
-│   └── APIs
+│   ├── db.js
+│   ├── routes
+│   │   ├── userRoutes.js
+│   │   ├── cartRoutes.js
+│   │   └── orderRoutes.js
+│   ├── package.json
+│   └── package-lock.json
 │
 ├── database
-│   │
 │   └── ananya_aura.sql
 │
 └── README.md
+```
 
 ---
 
@@ -247,4 +256,4 @@ Through this project, I gained practical experience in:
 
 # 👩‍💻 Developed By
 
-Ananya Aura Jewellery Project Member Balisetti Anusha
+Ananya Aura Jewellery Project
