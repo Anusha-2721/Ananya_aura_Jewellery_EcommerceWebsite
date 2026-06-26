@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Register</title>
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="./Login.css">
+
+
+</head>
+
+
+<body class="d-flex justify-content-center align-items-center"
+style="height:100vh;">
+
+
+
+<div class="card login-card" style="width:500px">
+
+
+<div class="card-body text-center">
+
+
+<h1 class="card-title">
+Ananya Aura Jewellery
+</h1>
+
+
+<h3 class="card-text">
+Create New Account
+</h3>
+<form id="registerForm" class="text-start">
+<div class="mb-3">
+
+<label class="form-label">
+User Name
+</label>
+
+<input 
+type="text"
+class="form-control"
+id="username">
+
+</div>
+
+
+
+
+<div class="mb-3">
+
+<label class="form-label">
+Phone Number
+</label>
+
+<input 
+type="tel"
+class="form-control"
+id="phonenumber"
+placeholder="Enter phone number">
+
+</div>
+
+
+
+
+<div class="mb-3">
+
+<label class="form-label">
+Date Of Birth
+</label>
+
+<input 
+type="date"
+class="form-control"
+id="dateofbirth">
+
+</div>
+
+
+
+
+
+<div class="mb-3">
+
+<label class="form-label">
+Email Address
+</label>
+
+<input 
+type="email"
+class="form-control"
+id="emailInput"
+placeholder="name@example.com">
+
+</div>
+
+
+
+
+
+<div class="mb-3">
+
+<label class="form-label">
+Password
+</label>
+
+<input 
+type="password"
+class="form-control"
+id="passwordInput">
+
+</div>
+
+
+
+
+<button 
+type="submit"
+class="btn btn-primary w-100">
+
+Register
+
+</button>
+</form>
+
+
+</div>
+
+</div>
+<script>
+
+
+document
+.getElementById("registerForm")
+.addEventListener("submit",function(event){
+
+event.preventDefault();
+
+
+let username =
+document.getElementById("username").value;
+
+
+let phone =
+document.getElementById("phonenumber").value;
+
+
+let dob =
+document.getElementById("dateofbirth").value;
+
+
+let email =
+document.getElementById("emailInput").value;
+
+
+let password =
+document.getElementById("passwordInput").value;
+
+
+
+if(
+username=="" ||
+phone=="" ||
+dob=="" ||
+email=="" ||
+password==""
+){
+
+alert("Please fill all details");
+
+return;
+
+}
+
+
+
+if(phone.length != 10){
+
+alert("Enter valid phone number");
+
+return;
+
+}
+
+
+
+let user = {
+
+username:username,
+
+phone:phone,
+
+dob:dob,
+
+email:email,
+
+password:password
+
+};
+
+
+
+// backend ki send
+fetch("http://localhost:5000/api/register/",{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify(user)
+
+})
+
+
+.then(res=>res.text())
+
+.then(data=>{
+
+
+alert(data);
+
+
+window.location.href="Login.html";
+
+
+})
+
+
+.catch(error=>{
+
+console.log(error);
+
+alert("Registration failed");
+
+});
+
+
+});
+
+
+</script>
+</body>
+</html>

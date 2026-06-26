@@ -1,0 +1,112 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:arial;
+}
+
+body{
+    min-height:100vh;
+    background:#f4f6f9;
+    color:black;
+    overflow-x:hidden;
+    position:relative;
+}
+
+
+
+header{
+    height:100px;
+    
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+    background:#1e293b;
+    
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    backdrop-filter:blur(10px);
+}
+.logo{
+    font-size:45px;
+    font-weight:bold;
+    color:blue;
+    
+}
+input{
+    width:450px;
+    padding:10px;
+    border-radius:20px;
+    border:1px solid gray;
+}
+.icons{
+    font-size:16px;
+    color:white;
+    text-decoration:none;
+}
+nav{
+    display:flex;
+    gap:40px;
+    padding:15px;
+    background:#212a38;
+    backdrop-filter:blur(10px);
+}
+
+nav a{
+    text-decoration:none;
+    color:white;
+    font-size:15px;
+}
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr); /* ఒక్క line కి 2 cards */
+    gap:40px;
+    padding:50px;
+    max-width:1200px;
+    margin:auto;
+    margin-top: 130px;
+}
+
+.card{
+    background:#e5e7de;
+    color:black;
+    backdrop-filter:blur(10px);
+    padding:30px;
+    text-align:center;
+    border-radius:15px;
+    box-shadow:0 0 15px rgba(0,0,0,0.4);
+    border:1px solid rgba(255,255,255,0.1);
+    
+    min-height:200px; 
+}
+.card img{
+    width:200px; 
+    height:200px;
+    margin-bottom:15px;
+}
+
+
+button{
+    color: white;
+    background-image: linear-gradient(to right, rgb(139,92,246), rgb(14,165,233));
+    border: none;
+    padding: 10px;
+    font-weight: 600;
+    cursor:pointer;
+    border-radius:15px;
+}
+
+button:hover{
+    background:#008cff;
+}
+a{
+    text-decoration:none;
+}
+.top-bar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+
+}

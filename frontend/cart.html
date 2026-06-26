@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Cart</title>
+
+<link rel="stylesheet" href="cart.css">
+
+</head>
+
+
+<body>
+
+
+<h1>Your Cart</h1>
+
+
+<div class="cart-container" id="cartItems"></div>
+
+
+<h2 class="total" id="total">
+Total Amount : ₹0
+</h2>
+
+
+
+
+
+<script>
+
+
+let cart = [];
+
+let container =
+document.getElementById("cartItems");
+
+
+let totalAmount = 0;
+
+
+
+
+// LOAD CART FROM DATABASE
+
+async function loadCart(){
+
+
+let res = await fetch(
+"http://localhost:5000/api/cart/1"
+);
+
+
+
+cart = await res.json();
+
+
+
+container.innerHTML="";
+
+totalAmount = 0;
+
+
+
+
+// EMPTY CART CHECK
+
+if(cart.length == 0){
+
+
+container.innerHTML =
+"<h2>Your Cart is Empty 🛒</h2>";
+
+
+document.getElementById("total").innerHTML =
+"Total Amount : ₹0";
+
+
+return;
+
+
+}
+
+
+
+
+cart.forEach((item)=>{
+
+
+let qty = item.quantity || 1;
+
+
+
+container.innerHTML += `
+
+
+<div class="cart-card">
+
+
+
+<img src="${item.image}">
+
+
+
+<div class="details">
+
+
+
+<h2>
+${item.product_name}
+</h2>
+
+
+
+<p>
+Price : ₹${item.price}
+</p>
+
+
+
+<p>
+Quantity : ${qty}
+</p>
+
+
+
+
+<button 
+class="cancel"
+onclick="removeItem(${item.id})">
+
+Cancel
+
+</button>
+
+
+
+
+<button 
+class="order"
+onclick="checkout()">
+
+Place Order
+
+</button>
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+`;
+
+
+
+totalAmount += item.price * qty;
+
+
+
+});
+
+
+
+
+document.getElementById("total").innerHTML =
+"Total Amount : ₹"+totalAmount;
+
+
+
+}
+
+
+
+
+
+
+// DELETE CART ITEM
+
+async function removeItem(id){
+
+
+
+let res = await fetch(
+
+"http://localhost:5000/api/cart/"+id,
+
+{
+
+
+method:"DELETE"
+
+
+}
+
+);
+
+
+
+
+let data = await res.text();
+
+
+
+alert(data);
+
+
+
+// refresh cart
+
+loadCart();
+
+
+
+}
+
+
+
+
+
+
+
+function checkout(){
+
+
+window.location.href =
+"checkoutPage.html";
+
+
+}
+
+
+
+
+
+
+loadCart();
+
+
+
+</script>
+
+
+</body>
+
+</html>

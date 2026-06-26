@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>My Profile</title>
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+
+body{
+
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(135deg,#fff0f5,#fdf5e6);
+
+}
+
+
+
+.profile-card{
+
+
+    width:420px;
+    margin:80px auto;
+    background:white;
+    padding:30px;
+    border-radius:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    text-align:center;
+
+}
+
+
+
+.profile-icon{
+
+    font-size:70px;
+    background:#ffe4ec;
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+}
+
+
+
+h1{
+
+    color:#b76e79;
+
+}
+
+
+
+.info{
+
+
+    text-align:left;
+    margin-top:25px;
+
+}
+
+
+
+.info p{
+
+
+    background:#fafafa;
+    padding:12px;
+    border-radius:10px;
+    margin:12px 0;
+    box-shadow:0 2px 5px #ddd;
+
+}
+
+
+
+button{
+
+
+    margin-top:20px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:20px;
+    background:#b76e79;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+
+
+}
+
+
+
+button:hover{
+
+    background:#8e4f59;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="profile-card">
+
+
+
+<div class="profile-icon">
+👤
+</div>
+
+
+
+<h1>
+My Profile
+</h1>
+
+
+
+<div class="info">
+
+
+<p id="name">
+Loading...
+</p>
+
+
+<p id="email">
+</p>
+
+
+<p id="phone">
+</p>
+
+
+<p id="address">
+</p>
+
+
+
+</div>
+
+
+
+<button onclick="goHome()">
+
+Continue Shopping
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+<script>
+
+
+
+async function loadProfile(){
+
+
+let user =
+JSON.parse(localStorage.getItem("loggedUser"));
+
+
+
+if(!user){
+
+document.querySelector(".profile-card").innerHTML =
+"<h2>No User Found</h2>";
+
+return;
+
+}
+
+
+
+
+
+let res = await fetch(
+"http://localhost:5000/api/profile/"+user.id
+);
+
+
+
+let customer = await res.json();
+
+
+
+
+document.getElementById("name").innerHTML =
+"👤 Name : " + customer.username;
+
+
+
+document.getElementById("email").innerHTML =
+"📧 Email : " + customer.email;
+
+
+
+document.getElementById("phone").innerHTML =
+"📞 Phone : " + customer.phone;
+
+
+
+document.getElementById("address").innerHTML =
+"🎂 DOB : " + customer.dob;
+
+
+
+
+}
+
+
+
+
+function goHome(){
+
+window.location.href="main.html";
+
+}
+
+
+
+loadProfile();
+
+
+
+</script>
+
+
+
+</body>
+
+</html>

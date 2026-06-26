@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Details</title>
+<link rel="stylesheet" href="ProductDetailPage.css">
+</head>
+<body>
+
+<h1>Product Details</h1>
+
+<div id="product-container"></div>
+<button onclick="window.location.href='main.html'">
+    Back to Home
+</button>
+
+<script>
+
+const products = {
+
+    1: {
+        name: "Diamond Ring",
+        price: "₹8000",
+        image: "ca1.png",
+        description: "Elegant diamond ring crafted with premium quality stones."
+    },
+
+    2: {
+        name: "Necklace",
+        price: "₹8000",
+        image: "ca2.png",
+        description: "Beautiful necklace suitable for special occasions."
+    },
+
+    3: {
+        name: "Bangles",
+        price: "₹800",
+        image: "ca3.png",
+        description: "Stylish bangles with elegant design."
+    },
+
+    4: {
+        name: "Earrings",
+        price: "₹500",
+        image: "ca4.png",
+        description: "Trendy earrings for daily wear."
+    },
+
+    5: {
+        name: "Anklets",
+        price: "₹300",
+        image: "ca5.png",
+        description: "Traditional anklets with modern look."
+    },
+
+    6: {
+        name: "Chain",
+        price: "₹8000",
+        image: "ca6.png",
+        description: "Premium quality chain."
+    },
+
+    7: {
+        name: "Bracelet",
+        price: "₹6000",
+        image: "ca7.png",
+        description: "Luxury bracelet for men and women."
+    },
+
+    8: {
+        name: "Ring",
+        price: "₹3000",
+        image: "ca8.png",
+        description: "Classic ring with elegant finish."
+    },
+
+    9: {
+        name: "Watch",
+        price: "₹2500",
+        image: "ca9.png",
+        description: "Stylish watch with modern design."
+    },
+
+    10: {
+        name: "Watch",
+        price: "₹6000",
+        image: "ca10.png",
+        description: "Premium watch collection."
+    }
+};
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+const product = products[id];
+
+if(product){
+    document.getElementById("product-container").innerHTML = `
+    <div class="product-detail">
+
+
+    <img src="${product.image}" alt="${product.name}">
+
+    <h2>${product.name}</h2>
+
+    <p><b>Price:</b> ${product.price}</p>
+
+    <p>${product.description}</p>
+
+    <button>Buy Now</button>
+
+    </div>
+`;
+}
+else{
+    document.getElementById("product-container").innerHTML =
+    "<h2>Product Not Found</h2>";
+}
+
+</script>
+
+</body>
+</html>

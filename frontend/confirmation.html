@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Order Confirmation</title>
+
+<style>
+
+body{
+    text-align:center;
+    font-family:Arial;
+}
+
+.box{
+    margin:100px auto;
+    width:400px;
+    padding:30px;
+    border:2px solid black;
+    border-radius:15px;
+}
+
+button{
+    padding:10px 20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="box">
+
+<h1>🎉 Order Confirmed</h1>
+
+<h2>Thank You!</h2>
+
+<p>Your order has been placed successfully.</p>
+
+<p id="orderDetails"></p>
+
+
+<button onclick="goHome()">
+Continue Shopping
+</button>
+
+
+</div>
+
+
+
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+
+let total = 0;
+
+
+cart.forEach(item=>{
+
+total += item.price * (item.qty || 1);
+
+});
+
+
+document.getElementById("orderDetails").innerHTML =
+"Total Amount : ₹" + total;
+
+
+
+function goHome(){
+
+window.location.href="orders.html";
+
+}
+
+</script>
+
+
+</body>
+</html>

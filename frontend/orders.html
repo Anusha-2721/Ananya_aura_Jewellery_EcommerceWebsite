@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>My Orders</title>
+
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+}
+
+
+h1{
+text-align:center;
+}
+
+
+.order-container{
+
+width:80%;
+margin:auto;
+
+}
+
+
+.order-card{
+
+background:white;
+margin:20px;
+padding:20px;
+border-radius:15px;
+box-shadow:0 0 10px gray;
+
+}
+
+
+button{
+
+padding:10px;
+border:none;
+background:black;
+color:white;
+border-radius:8px;
+cursor:pointer;
+
+}
+
+
+.status{
+
+font-weight:bold;
+color:green;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<h1>My Orders</h1>
+
+
+<div class="order-container" id="orders">
+
+</div>
+
+
+
+<script>
+
+
+let container =
+document.getElementById("orders");
+
+
+
+
+// LOAD ORDERS FROM DATABASE
+
+
+async function loadOrders(){
+
+
+let res = await fetch(
+"http://localhost:5000/api/orders/1"
+);
+
+
+
+let orders = await res.json();
+
+
+
+container.innerHTML="";
+
+
+
+if(orders.length == 0){
+
+
+container.innerHTML =
+"<h2>No Orders Found</h2>";
+
+return;
+
+}
+
+
+
+
+orders.forEach(order=>{
+
+
+
+let cancelBtn="";
+
+
+
+if(order.status=="Processing"){
+
+
+cancelBtn = `
+
+<button onclick="cancelOrder(${order.id})">
+
+Cancel Order
+
+</button>
+
+`;
+
+
+
+}
+
+
+
+
+
+container.innerHTML += `
+
+
+
+<div class="order-card">
+
+
+
+<h2>
+Order ID : ${order.id}
+</h2>
+
+
+
+<p>
+Product : ${order.product_name}
+</p>
+
+
+
+<p>
+Price : ₹${order.price}
+</p>
+
+
+
+<p>
+Quantity : ${order.quantity}
+</p>
+
+
+
+<h3>
+Total : ₹${order.total}
+</h3>
+
+
+
+<p>
+Status :
+<span class="status">
+${order.status}
+</span>
+</p>
+
+
+
+${cancelBtn}
+
+
+
+</div>
+
+
+`;
+
+
+
+});
+
+
+
+
+}
+
+
+
+
+
+
+
+// CANCEL ORDER
+
+
+async function cancelOrder(id){
+
+
+
+let res = await fetch(
+
+"http://localhost:5000/api/orders/cancel/"+id,
+
+{
+
+method:"PUT"
+
+}
+
+);
+
+
+
+
+let data = await res.text();
+
+
+
+alert(data);
+
+
+
+loadOrders();
+
+
+
+}
+
+
+
+
+
+
+loadOrders();
+
+</script>
+
+</body>
+
+</html>

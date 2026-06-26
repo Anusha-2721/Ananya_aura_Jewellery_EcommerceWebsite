@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Buy Now</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+}
+
+
+.box{
+
+width:400px;
+margin:50px auto;
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 0 10px gray;
+
+}
+
+
+img{
+
+width:200px;
+
+}
+
+
+input,textarea,select,button{
+
+width:100%;
+padding:10px;
+margin:10px 0;
+
+}
+
+
+button{
+
+background:black;
+color:white;
+border:none;
+border-radius:8px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="box">
+
+
+<h1>Buy Now</h1>
+
+
+<div id="product"></div>
+
+
+<h2>Customer Details</h2>
+
+
+<input id="name" placeholder="Name" required>
+
+
+<input id="email" placeholder="Email" required>
+
+
+<input id="phone" placeholder="Phone" required>
+
+
+<textarea id="address" placeholder="Address"></textarea>
+
+
+
+<select id="payment">
+
+<option>Cash on Delivery</option>
+
+<option>UPI</option>
+
+<option>Card</option>
+
+</select>
+
+
+
+<button onclick="placeOrder()">
+
+Place Order
+
+</button>
+
+
+
+</div>
+
+
+
+
+<script>
+
+
+let product =
+JSON.parse(localStorage.getItem("buyNow"));
+
+
+
+document.getElementById("product").innerHTML = `
+
+
+<img src="${product.image}">
+
+
+<h2>${product.name}</h2>
+
+<h3>
+₹${product.price}
+</h3>
+
+`;
+
+
+
+
+function placeOrder(){
+
+
+let customer={
+
+name:name.value,
+
+email:email.value,
+
+phone:phone.value,
+
+address:address.value,
+
+payment:payment.value
+
+};
+
+
+
+let order={
+
+
+id:"ORD"+Date.now(),
+
+
+customer:customer,
+
+
+products:[product],
+
+
+total:product.price,
+
+
+status:"Processing"
+
+
+};
+
+
+
+let orders =
+JSON.parse(localStorage.getItem("orders")) || [];
+
+
+
+orders.push(order);
+
+
+
+localStorage.setItem(
+"orders",
+JSON.stringify(orders)
+);
+
+
+
+window.location.href="confirmation.html";
+
+
+}
+
+
+
+</script>
+
+
+</body>
+
+</html>

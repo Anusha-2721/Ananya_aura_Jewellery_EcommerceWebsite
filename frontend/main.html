@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Ananya Aura Jewellery</title>
+
+<link rel="stylesheet" href="main.css">
+
+</head>
+
+
+<body>
+
+
+<div class="top-bar">
+
+
+<header>
+
+
+<div class="logo">
+💎 Ananya Aura Jewellery
+</div>
+
+
+
+<input 
+type="text" 
+id="search" 
+placeholder="Search jewellery...">
+
+
+
+
+
+<div class="icons">
+
+
+<span onclick="openProfile()" style="cursor:pointer;">
+👤 Profile
+</span>
+
+
+<span onclick="openCart()" style="cursor:pointer;">
+🛒 Cart
+</span>
+
+
+<span onclick="logout()" style="cursor:pointer;">
+🚪 Logout
+</span>
+
+
+</div>
+
+
+</header>
+
+
+
+<nav>
+
+<a href="#" onclick="showCategory('all')">Home</a> |
+
+<a href="#" onclick="showCategory('men')">Men</a> |
+
+<a href="#" onclick="showCategory('women')">Women</a> |
+
+<a href="orders.html">Orders</a>
+
+</nav>
+
+
+</div>
+
+
+
+
+
+<section class="products" id="productList">
+
+</section>
+
+
+
+
+
+
+
+<script>
+// ADD CART API
+
+let products = [];
+
+
+async function addCart(name,price,image){
+
+
+let product = {
+
+user_id:1,
+
+product_name:name,
+
+price:price,
+
+image:image,
+
+quantity:1
+
+};
+
+
+
+let res = await fetch(
+"http://localhost:5000/api/cart",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(product)
+
+});
+
+
+let data = await res.text();
+
+
+alert(data);
+
+
+window.location.href="cart.html";
+
+
+}
+
+
+
+
+
+function openCart(){
+
+window.location.href="cart.html";
+
+}
+
+
+
+function openProfile(){
+
+window.location.href="profile.html";
+
+}
+
+
+
+
+
+function buyNow(name,price,image){
+
+
+let product={
+
+name:name,
+
+price:price,
+
+image:image,
+
+qty:1
+
+};
+
+
+localStorage.setItem(
+"buyNow",
+JSON.stringify(product)
+);
+
+
+window.location.href="buynow.html";
+
+}
+
+function logout(){
+
+
+localStorage.clear();
+
+
+alert("Logged out successfully");
+
+
+window.location.href="Login.html";
+
+}
+
+// DISPLAY PRODUCTS
+
+function displayProducts(list){
+
+
+let container =
+document.getElementById("productList");
+
+
+container.innerHTML="";
+
+
+
+list.forEach(p=>{
+
+
+container.innerHTML += `
+
+
+<div class="card">
+
+
+<img src="${p.image}">
+
+
+<h3>
+${p.name}
+</h3>
+
+
+<p>
+₹${p.price}
+</p>
+
+
+
+<button onclick="addCart('${p.name}',${p.price},'${p.image}')">
+
+Add Cart
+
+</button>
+
+
+
+<button onclick="buyNow('${p.name}',${p.price},'${p.image}')">
+
+Buy Now
+
+</button>
+
+
+</div>
+
+
+`;
+
+
+
+});
+
+
+}
+
+
+
+
+
+
+// LOAD PRODUCTS
+
+
+window.onload = async function(){
+
+
+let res = await fetch(
+"http://localhost:5000/api/products"
+);
+
+
+
+products = await res.json();
+
+
+
+displayProducts(products);
+
+
+
+}
+
+
+
+
+
+
+
+// SEARCH FUNCTION
+
+
+document.getElementById("search")
+.addEventListener("keyup",function(){
+
+
+let value =
+this.value.toLowerCase();
+
+
+
+let filteredProducts =
+products.filter(p=>{
+
+
+return p.name
+.toLowerCase()
+.includes(value);
+
+
+});
+
+
+
+displayProducts(filteredProducts);
+
+
+
+});
+function showCategory(category){
+
+
+if(category=="all"){
+
+displayProducts(products);
+
+return;
+
+}
+
+
+
+let filteredProducts = products.filter(p=>{
+
+
+return p.category &&
+p.category.toLowerCase().trim() == category;
+
+
+});
+
+
+displayProducts(filteredProducts);
+
+
+}
+</script>
+</body>
+</html>

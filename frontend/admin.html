@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Admin Panel</title>
+
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+}
+
+
+h1{
+text-align:center;
+}
+
+
+.container{
+
+width:80%;
+margin:auto;
+
+}
+
+
+.order-card{
+
+background:white;
+padding:20px;
+margin:20px;
+border-radius:15px;
+box-shadow:0 0 10px gray;
+
+}
+
+
+select,button{
+
+padding:10px;
+margin:10px;
+
+}
+
+
+button{
+
+background:black;
+color:white;
+border:none;
+border-radius:8px;
+
+}
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+
+<h1>Admin Panel</h1>
+
+
+<div class="container" id="orders">
+
+</div>
+
+
+
+
+<script>
+
+
+
+// admin protection
+
+if(localStorage.getItem("admin")!="true"){
+
+
+alert("Access Denied");
+
+
+window.location.href="adminLogin.html";
+
+
+}
+
+
+
+
+
+
+let orders =
+JSON.parse(localStorage.getItem("orders")) || [];
+
+
+
+let container =
+document.getElementById("orders");
+
+
+
+
+
+
+if(orders.length==0){
+
+
+container.innerHTML =
+"<h2>No Orders Found</h2>";
+
+
+}
+
+
+
+
+
+
+
+orders.forEach((order,index)=>{
+
+
+
+
+
+container.innerHTML += `
+
+
+<div class="order-card">
+
+
+
+<h2>
+Order ID : ${order.id}
+</h2>
+
+
+
+
+<p>
+Customer :
+${order.customer.name}
+</p>
+
+
+
+<p>
+Email :
+${order.customer.email}
+</p>
+
+
+
+<p>
+Phone :
+${order.customer.phone}
+</p>
+
+
+
+<p>
+Address :
+${order.customer.address}
+</p>
+
+
+
+
+<h3>Products</h3>
+
+
+
+${order.products.map(item=>`
+
+
+<p>
+
+${item.name} - ₹${item.price}
+
+</p>
+
+
+`).join("")}
+
+<h3>
+Total : ₹${order.total}
+</h3>
+
+<p>
+
+Current Status :
+
+<b>
+${order.status}
+</b>
+
+</p>
+
+<select onchange="updateStatus(${index},this.value)">
+
+<option ${order.status=="Processing"?"selected":""}>
+
+Processing
+
+</option>
+
+<option ${order.status=="Shipped"?"selected":""}>
+
+Shipped
+
+</option>
+
+<option ${order.status=="Delivered"?"selected":""}>
+
+Delivered
+
+</option>
+
+
+<option ${order.status=="Cancelled"?"selected":""}>
+
+Cancelled
+
+</option>
+
+
+
+</select>
+
+
+</div>
+
+
+`;
+
+
+
+});
+
+
+
+
+
+
+
+
+function updateStatus(index,status){
+
+
+
+let orders =
+JSON.parse(localStorage.getItem("orders")) || [];
+
+
+
+
+orders[index].status=status;
+
+
+
+
+localStorage.setItem(
+"orders",
+JSON.stringify(orders)
+);
+
+
+
+
+alert("Order Status Updated ✅");
+
+
+
+location.reload();
+}
+
+</script>
+
+</body>
+
+</html>
