@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Details</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f5f5f5;
+}
+
+.container {
+    width: 400px;
+    max-width: 90%;
+    margin: 50px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px gray;
+}
+
+input, textarea, select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+
+button {
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+h1 {
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Customer Details</h1>
+
+<form id="checkoutForm">
+
+<input type="text" id="name" placeholder="Enter name" required>
+
+<input type="email" id="email" placeholder="Enter email" required>
+
+<input type="tel" id="phone" placeholder="Enter phone number"
+       pattern="[0-9]{10}" maxlength="10" required>
+
+<textarea id="address" placeholder="Enter complete delivery address"
+          required></textarea>
+
+<input type="text" id="location"
+       placeholder="Enter city / town / area" required>
+
+<select id="payment">
+    <option value="Cash on Delivery">Cash on Delivery</option>
+    <option value="UPI">UPI</option>
+    <option value="Card">Card</option>
+</select>
+
+<button type="submit" id="placeOrderBtn">Place Order</button>
+
+</form>
+
+</div>
+
+<script>
+
+const API = "https://ecommerce-website-n3ur.onrender.com";
+
+const loggedUser = JSON.parse(
+    localStorage.getItem("loggedUser") || "null"
+);
+
+// Check login
+if (!loggedUser || !loggedUser.id) {
+    alert("Please login first");
+    window.location.href = "login.html";
+}
+
+// Automatically fill customer details
+if (loggedUser) {
+    document.getElementById("name").value =
+        loggedUser.username || loggedUser.name || "";
+
+    document.getElementById("email").value =
+        loggedUser.email || "";
+}
+
+document.getElementById("checkoutForm")
+.addEventListener("submit", placeOrder);
+
+async function placeOrder(event) {
+
+    event.preventDefault();
+
+    const button = document.getElementById("placeOrderBtn");
+
+    button.disabled = true;
+    button.innerText = "Placing Order...";
+
+    try {
+
+        // Get only this customer's cart
+        let cartRes = await fetch(
+            `${API}/api/cart/${loggedUser.id}`
+        );
+
+        if (!cartRes.ok) {
+            throw new Error("Unable to load cart");
+        }
+
+        let cart = await cartRes.json();
+        console.log("CART DATA:", cart);
+
+cart.forEach(item => {
+    console.log("Product:", item.product_name);
+    console.log("Image:", item.image);
+});
+        if (!Array.isArray(cart) || cart.length === 0) {
+            alert("Your cart is empty");
+            return;
+        }
+
+        let total = 0;
+        let totalQuantity = 0;
+
+        cart.forEach(item => {
+
+            let qty = Number(item.quantity || item.qty || 1);
+
+            total += Number(item.price) * qty;
+            totalQuantity += qty;
+
+        });
+
+        const orderData = {
+
+            user_id: loggedUser.id,
+
+            customer_name:
+                document.getElementById("name").value,
+
+            email:
+                document.getElementById("email").value,
+
+            phone:
+                document.getElementById("phone").value,
+
+            address:
+                document.getElementById("address").value,
+
+            location:
+                document.getElementById("location").value,
+
+            payment_method:
+                document.getElementById("payment").value,
+
+            product_name: cart.map(item =>
+                item.product_name || item.name
+            ).join(", "),
+             product_image: cart.map(item =>
+             item.image || item.product_image || ""
+              ).join(", "),
+            price: Number(cart[0].price),
+
+            quantity: totalQuantity,
+
+            total: total
+
+        };
+
+        let res = await fetch(`${API}/api/orders`, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(orderData)
+
+        });
+
+        let data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || "Order Failed");
+        }
+
+        // Save generated order ID for confirmation
+        localStorage.setItem("lastOrderId", data.orderId);
+
+        alert("Order Placed Successfully 🎉");
+
+        window.location.href =
+            "confirmation.html?orderId=" + data.orderId;
+
+    }
+
+    catch(error) {
+
+        console.log(error);
+        alert(error.message || "Something went wrong");
+
+    }
+
+    finally {
+        button.disabled = false;
+        button.innerText = "Place Order";
+    }
+
+}
+
+</script>
+
+</body>
+</html>

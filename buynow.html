@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Buy Now</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+}
+
+
+.box{
+
+width:400px;
+margin:50px auto;
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 0 10px gray;
+
+}
+
+
+img{
+
+width:200px;
+
+}
+
+
+input,textarea,select,button{
+
+width:100%;
+padding:10px;
+margin:10px 0;
+
+}
+
+
+button{
+
+background:black;
+color:white;
+border:none;
+border-radius:8px;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="box">
+
+
+<h1>Buy Now</h1>
+
+
+<div id="product"></div>
+
+
+<h2>Customer Details</h2>
+
+
+<input id="name" placeholder="Name" required>
+
+
+<input id="email" placeholder="Email" required>
+
+
+<input id="phone" placeholder="Phone" required>
+
+
+<textarea id="address" placeholder="Address"></textarea>
+
+<input id="location" placeholder="Near Address / Area / City" required>
+
+
+<select id="payment">
+
+<option>Cash on Delivery</option>
+
+<option>UPI</option>
+
+<option>Card</option>
+
+</select>
+
+
+
+<button onclick="placeOrder()">
+
+Place Order
+
+</button>
+
+
+
+</div>
+
+
+
+
+<script>
+
+const API = "https://ecommerce-website-n3ur.onrender.com";
+
+let product = JSON.parse(localStorage.getItem("buyNow"));
+
+let loggedUser = JSON.parse(
+    localStorage.getItem("loggedUser")
+);
+
+// Check login
+if (!loggedUser || !loggedUser.id) {
+    alert("Please login first");
+    window.location.href = "Login.html";
+}
+
+// Check product
+if (!product) {
+    alert("Product details not found. Please select a product again.");
+} else {
+    document.getElementById("product").innerHTML = `
+        <img src="${product.image}">
+        <h2>${product.name}</h2>
+        <h3>₹${product.price}</h3>
+    `;
+}
+
+
+// PLACE ORDER
+async function placeOrder() {
+
+    if (!product) {
+        alert("Product not found");
+        return;
+    }
+
+    let customer = {
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        address: document.getElementById("address").value.trim(),
+        location: document.getElementById("location").value.trim(),
+        payment: document.getElementById("payment").value
+    };
+
+    if (
+        !customer.name ||
+        !customer.email ||
+        !customer.phone ||
+        !customer.address ||
+        !customer.location
+    ) {
+        alert("Please fill all customer details");
+        return;
+    }
+
+    let orderData = {
+
+        user_id: loggedUser.id,
+
+        customer_name: customer.name,
+        email: customer.email,
+        phone: customer.phone,
+        address: customer.address,
+        location: customer.location,
+
+        payment_method: customer.payment,
+
+        product_name: product.name,
+        product_image: product.image,
+        price: Number(product.price),
+        quantity: 1,
+        total: Number(product.price)
+
+    };
+
+    try {
+
+        let res = await fetch(`${API}/api/orders`, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(orderData)
+
+        });
+
+        let data = await res.json();
+
+        if (res.ok) {
+
+            localStorage.setItem(
+                "lastOrderId",
+                data.orderId
+            );
+
+            alert("Order Placed Successfully!");
+
+            localStorage.removeItem("buyNow");
+
+            window.location.href =
+                "confirmation.html?orderId=" + data.orderId;
+
+        } else {
+
+            alert(data.message || "Order Failed");
+
+        }
+
+    } catch (error) {
+
+        console.log(error);
+        alert("Server not reachable");
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>

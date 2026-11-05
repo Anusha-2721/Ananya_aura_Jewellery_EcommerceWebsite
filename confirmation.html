@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Order Confirmation</title>
+
+<style>
+
+body{
+    text-align:center;
+    font-family:Arial;
+}
+
+.box{
+    margin:100px auto;
+    width:400px;
+    padding:30px;
+    border:2px solid black;
+    border-radius:15px;
+}
+
+button{
+    padding:10px 20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="box">
+
+<h1>🎉 Order Confirmed</h1>
+
+<h2>Thank You!</h2>
+
+<p>Your order has been placed successfully.</p>
+
+<p id="orderDetails"></p>
+
+
+<button onclick="goHome()">
+Continue Shopping
+</button>
+
+
+</div>
+
+
+
+<script>
+
+
+const API = "https://ecommerce-website-n3ur.onrender.com";
+
+const loggedUser = JSON.parse(
+    localStorage.getItem("loggedUser")
+);
+
+async function loadOrderDetails() {
+
+    if (!loggedUser || !loggedUser.id) {
+        alert("Please login first!");
+        window.location.href = "login.html";
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API}/api/orders/${loggedUser.id}`
+        );
+
+        const orders = await response.json();
+
+        const orderId = new URLSearchParams(
+            window.location.search
+        ).get("orderId");
+
+        const order = orders.find(
+            item => String(item.id) === String(orderId)
+        );
+
+        if (!order) {
+            document.getElementById("orderDetails").innerHTML =
+                "Order details not found.";
+            return;
+        }
+
+        document.getElementById("orderDetails").innerHTML = `
+            <h3>Order ID: #${order.id}</h3>
+            <p>Product: ${order.product_name}</p>
+            <p>Price: ₹${order.price}</p>
+            <p>Quantity: ${order.quantity}</p>
+            <h3>Total Amount: ₹${order.total}</h3>
+            <p>Status: ${order.status}</p>
+        `;
+
+    } catch (error) {
+        console.error(error);
+        document.getElementById("orderDetails").innerHTML =
+            "Unable to load order details.";
+    }
+}
+
+function goHome() {
+    window.location.href = "orders.html";
+}
+
+loadOrderDetails();
+</script>
+
+
+</body>
+</html>

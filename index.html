@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ananya Aura Jewellery | Shine More</title>
+
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="#" class="logo">
+            <span class="diamond">💎</span>
+            <div>
+                <h1>Ananya Aura</h1>
+                <h2>──── Jewellery──── </h2>
+            </div>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+            ☰
+        </button>
+
+        <nav id="navMenu">
+            <a href="#home">⌂ Home</a> |
+            <a href="#about">About</a> |
+            <a href="#shop">Shop</a>
+            
+        </nav>
+
+        <div class="nav-buttons">
+            <a href="Login.html" class="login-btn">♙ Login</a>
+            <a href="register.html" class="register-btn">♟ Register</a>
+        </div>
+    </header>
+
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <p class="tagline">──── Shine More... Feel Special... ────</p>
+
+            <h1>
+                Ananya Aura
+                <span>Jewellery</span>
+            </h1>
+
+            <p class="description">
+                Explore our exquisite collection of jewellery
+                for every occasion. Discover timeless beauty
+                and elegance with Ananya Aura.
+            </p>
+
+            <div class="decoration">✦ ───── 💎 ───── ✦</div>
+
+            <div class="hero-buttons" id="shop">
+                <a href="Login.html" class="shop-btn">
+                    🛍 Shop Now →
+                </a>
+
+                <a href="#about" class="explore-btn">
+                    Explore More
+                </a>
+            </div>
+
+        </div>
+
+        <div class="hero-image">
+            <img src="hero-model.jpg" alt="Beautiful jewellery collection">
+        </div>
+
+    </section>
+
+
+    <!-- Features Section -->
+    <section class="features" id="why-us">
+
+        <div class="feature">
+            <span>💎</span>
+            <div>
+                <h3>Premium Quality</h3>
+                <p>Timeless Elegance</p>
+            </div>
+        </div>
+
+        <div class="feature">
+            <span>🚚</span>
+            <div>
+                <h3>Free Shipping</h3>
+                <p>Across India</p>
+            </div>
+        </div>
+
+        <div class="feature">
+            <span>🛡️</span>
+            <div>
+                <h3>Secure Payment</h3>
+                <p>Shop with Confidence</p>
+            </div>
+        </div>
+
+        <div class="feature">
+            <span>🎧</span>
+            <div>
+                <h3>24/7 Support</h3>
+                <p>Always Here for You</p>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <h2>Welcome to Ananya Aura Jewellery</h2>
+
+        <p>
+            Jewellery is more than an accessory. It is a symbol
+            of beauty, confidence and personality. At Ananya Aura
+            Jewellery, we bring you elegant jewellery collections
+            for both men and women.
+        </p>
+
+        <a href="Login.html" class="about-btn">Discover Our Collection</a>
+    </section>
+
+
+    <!-- Footer -->
+    <footer id="contact">
+        <h2>💎 Ananya Aura Jewellery</h2>
+        <p>Shine More... Feel Special...</p>
+        <p>© 2026 Ananya Aura Jewellery. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        
+// Mobile Navigation Menu
+
+const menuToggle = document.getElementById("menuToggle");
+const navMenu = document.getElementById("navMenu");
+
+menuToggle.addEventListener("click", function () {
+    navMenu.classList.toggle("active");
+
+    if (navMenu.classList.contains("active")) {
+        menuToggle.textContent = "✕";
+    } else {
+        menuToggle.textContent = "☰";
+    }
+});
+
+
+// Close Menu After Clicking a Link
+
+const navLinks = document.querySelectorAll("#navMenu a");
+
+navLinks.forEach(function (link) {
+
+    link.addEventListener("click", function () {
+        navMenu.classList.remove("active");
+        menuToggle.textContent = "☰";
+    });
+
+});
+
+    </script>
+
+</body>
+</html>

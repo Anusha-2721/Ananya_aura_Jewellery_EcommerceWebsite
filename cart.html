@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Cart - Ananya Aura Jewellery</title>
+    <link rel="stylesheet" href="cart.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f4f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #8e2457;
+        }
+
+        .cart-container {
+            max-width: 900px;
+            margin: 20px auto;
+        }
+
+        .cart-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #ddd;
+        }
+
+        .cart-card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .details {
+            flex: 1;
+        }
+
+        .details h2 {
+            color: #8e2457;
+        }
+
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+        .cancel {
+            background: #dc3545;
+            color: white;
+        }
+
+        .order {
+            background: #8e2457;
+            color: white;
+        }
+
+        .total {
+            text-align: center;
+            color: #8e2457;
+        }
+
+        .empty {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        @media(max-width: 600px) {
+            .cart-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        .checkout-btn {
+    display: block;
+    margin: 20px auto;
+    background: #8e2457;
+    color: white;
+    padding: 12px 25px;
+    font-size: 16px;
+}
+    </style>
+</head>
+
+<body>
+
+    <h1>My Shopping Cart 🛒</h1>
+
+    <div class="cart-container" id="cartItems">
+        <p style="text-align:center;">Loading cart...</p>
+    </div>
+
+    <h2 class="total" id="total">
+        Total Amount: ₹0
+    </h2>
+    <button class="order checkout-btn" onclick="checkout()">
+    Proceed to Checkout
+</button>
+    <script>
+        const API = "https://ecommerce-website-n3ur.onrender.com";
+
+        let cart = [];
+
+        const container = document.getElementById("cartItems");
+        const totalElement = document.getElementById("total");
+
+        // GET LOGGED-IN USER
+        const loggedUser = JSON.parse(
+            localStorage.getItem("loggedUser")
+        );
+
+        if (!loggedUser || !loggedUser.id) {
+            alert("Please login first!");
+            window.location.href = "login.html";
+        }
+
+        // LOAD CART FROM DATABASE
+        async function loadCart() {
+
+            try {
+                const response = await fetch(
+                    `${API}/api/cart/${loggedUser.id}`
+                );
+
+                if (!response.ok) {
+                    throw new Error("Unable to load cart");
+                }
+
+                cart = await response.json();
+
+                container.innerHTML = "";
+                let totalAmount = 0;
+
+                if (cart.length === 0) {
+
+                    container.innerHTML = `
+                        <div class="empty">
+                            <h2>Your Cart is Empty 🛒</h2>
+                            <p>Add some jewellery to your cart!</p>
+                        </div>
+                    `;
+
+                    totalElement.innerHTML = "Total Amount: ₹0";
+                    return;
+                }
+
+                cart.forEach((item) => {
+
+                    const qty = Number(item.quantity) || 1;
+                    const price = Number(item.price) || 0;
+
+                    totalAmount += price * qty;
+
+                    container.innerHTML += `
+                        <div class="cart-card">
+
+                            <img src="${item.image}"
+                                 alt="${item.product_name}">
+
+                            <div class="details">
+
+                                <h2>${item.product_name}</h2>
+
+                                <p>Price: ₹${price}</p>
+
+                                <p>Quantity: ${qty}</p>
+
+                                <p>
+                                    Subtotal: ₹${price * qty}
+                                </p>
+
+                                <button
+                                    class="cancel"
+                                    onclick="removeItem(${item.id})">
+                                    Remove
+                                </button>
+
+                            </div>
+
+                        </div>
+                    `;
+                });
+
+                totalElement.innerHTML =
+                    "Total Amount: ₹" + totalAmount;
+
+                // SAVE CART TOTAL FOR CHECKOUT
+                localStorage.setItem(
+                    "cartTotal",
+                    totalAmount
+                );
+
+            } catch (error) {
+
+                console.error("Cart Error:", error);
+
+                container.innerHTML = `
+                    <div class="empty">
+                        <h2>Unable to load cart</h2>
+                        <p>Check whether your local backend is running.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // REMOVE CART ITEM
+        async function removeItem(id) {
+
+            if (!confirm("Do you want to remove this item?")) {
+                return;
+            }
+
+            try {
+
+                const response = await fetch(
+                    `${API}/api/cart/${id}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                const result = await response.text();
+
+                if (response.ok) {
+                    alert("Product removed successfully!");
+                    loadCart();
+                } else {
+                    alert(result || "Unable to remove product");
+                }
+
+            } catch (error) {
+
+                console.error(error);
+                alert("Local server not reachable!");
+
+            }
+        }
+
+        // PROCEED TO CHECKOUT
+        function checkout() {
+
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            window.location.href = "checkoutPage.html";
+        }
+
+        // LOAD CART WHEN PAGE OPENS
+        loadCart();
+
+    </script>
+
+</body>
+</html>
