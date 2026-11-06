@@ -12,7 +12,6 @@ console.log("Register API Called");
 
 let {username, phone, dob, email, password} = req.body;
 
-
 let sql =
 "INSERT INTO users(username,phone,dob,email,password) VALUES(?,?,?,?,?)";
 
