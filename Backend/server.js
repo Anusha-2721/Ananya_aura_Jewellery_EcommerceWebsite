@@ -1,3 +1,4 @@
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -18,11 +19,12 @@ app.use("/api", productRoutes);
 app.use("/api", cartRoutes);
 app.use("/api", orderRoutes);
 
-// TEST
 app.get("/", (req, res) => {
-  res.send("Backend Running");
+  res.send("Ananya Aura Jewellery Backend Running");
 });
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
